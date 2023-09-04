@@ -9,14 +9,19 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
     extra_kwargs={
       'password':{'write_only':True}
     }
-
   def validate(self, attrs):
     password = attrs.get('password')
     password2 = attrs.get('password2')
+    name = attrs.get('name')
+
+    if len(password)<=4:
+      raise serializers.ValidationError("password must contain atleast 5 characters")
     if password != password2:
       raise serializers.ValidationError("Password and Confirm Password doesn't match")
+    if len(name)<=4:
+      raise serializers.ValidationError("name must contain atleast 5 characters")
+    
     return attrs
-
   def create(self, validate_data):
     return User.objects.create_user(**validate_data)
 

@@ -1,6 +1,7 @@
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
+from rest_framework.decorators import api_view
  
 # from rest_framework.generics import CreateAPIView
 from home.serializer import  UserLoginSerializer, UserProfileSerializer, UserRegistrationSerializer,ProfileCrudSerializer
@@ -73,6 +74,7 @@ class ProfileCrud(APIView):
   
   def put(self,request,pk=None):
     id = pk 
+    print('heloooo',pk)
     if id is not None:
       user = User.objects.get(pk=id)
       serilaizer = ProfileCrudSerializer(user,request.data,partial=True)
@@ -82,6 +84,9 @@ class ProfileCrud(APIView):
       return Response(serilaizer.errors,status=status.HTTP_400_BAD_REQUEST)
 
 
-    
+# class InvalidUrl(APIView):
+@api_view(['GET','POST','PUT','PATCH','DELETE'])
+def InvalidUrl(request, *args, **kwargs):
+    return Response({"error": "Invalid URL path"}, status=status.HTTP_404_NOT_FOUND)
 
 
